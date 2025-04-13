@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Information Form - by Chirag Varyani</title>
+</head><style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body {
+    background-color: #e9f4fb;
+    color: #333;
+    padding: 40px 20px;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 500;
+    color: #1d4e89;
+  }
+
+  form {
+    max-width: 400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #ffffff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 80, 120, 0.1);
+    border: 1px solid #cce4f6;
+  }
+
+  input {
+    padding: 10px 12px;
+    border: 1px solid #bcdff5;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f9fcff;
+  }
+
+  input:focus {
+    border-color: #5cb0e5;
+    outline: none;
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  button {
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: #1d89e4;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  button[type="reset"] {
+    background-color: #a8cce9;
+    color: #333;
+  }
+
+  button:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 85, 170, 0.2);
+  }
+
+  table {
+    width: 100%;
+    max-width: 800px;
+    margin: 30px auto;
+    border-collapse: collapse;
+    font-size: 14px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 80, 120, 0.1);
+    border: 1px solid #cce4f6;
+  }
+
+  th, td {
+    padding: 12px;
+    border-bottom: 1px solid #eef6fc;
+    text-align: left;
+  }
+
+  th {
+    background-color: #d7ecfb;
+    color: #0f3b6f;
+    font-weight: 500;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f5faff;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 6px;
+  }
+
+  .action-buttons button {
+    background: none;
+    color: #1d89e4;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .action-buttons button:hover {
+    text-decoration: underline;
+    color: #0d6efd;
+  }
+</style>
+
+<body>
+  <center>
+
+  <h2>Information Form</h2>
+
+  <form id="userForm" onsubmit="submitForm(event)">
+    <input type="text" id="firstName" placeholder="First Name" required>
+    <input type="text" id="lastName" placeholder="Last Name" required>
+    <input type="text" id="email" placeholder="Email" required>
+    <input type="tel" name="contact" id="contact" pattern="[6-9][0-9]{9}" required placeholder="Enter mobile number">
+    <br><br>
+
+    <button type="reset">Reset</button>
+    <button type="submit">Submit</button>
+  </form>
+
+  <br>
+
+  <table border="1" id="dataTable">
+    <thead>
+      <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th>Contact</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</center>
+  <script>
+    let selectedRow = null;
+
+    function submitForm(event) {
+    event.preventDefault();
+
+      let firstName = document.getElementById("firstName").value;
+      let lastName = document.getElementById("lastName").value;
+      let email = document.getElementById("email").value;
+      let contact = document.getElementById("contact").value;
+
+      const table = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+
+      if (selectedRow == null) {
+        
+        let newRow = table.insertRow();
+
+        newRow.insertCell(0).innerText = firstName;
+        newRow.insertCell(1).innerText = lastName;
+        newRow.insertCell(2).innerText = email;
+        newRow.insertCell(3).innerText = contact;
+        newRow.insertCell(4).innerHTML = `
+          <button onclick="editRow(this)">Edit</button>
+          <button onclick="deleteRow(this)">Delete</button>
+        `;
+      } else {
+        selectedRow.cells[0].innerText = firstName;
+        selectedRow.cells[1].innerText = lastName;
+        selectedRow.cells[2].innerText = email;
+        selectedRow.cells[3].innerText = contact;
+        selectedRow = null;
+      }
+
+      document.getElementById("userForm").reset();
+    }
+
+    function editRow(button) {
+      selectedRow = button.parentElement.parentElement;
+
+      document.getElementById("firstName").value = selectedRow.cells[0].innerText;
+      document.getElementById("lastName").value = selectedRow.cells[1].innerText;
+      document.getElementById("email").value = selectedRow.cells[2].innerText;
+      document.getElementById("contact").value = selectedRow.cells[3].innerText;
+    }
+
+    function deleteRow(button) {
+      const row = button.parentElement.parentElement;
+      document.getElementById("dataTable").deleteRow(row.rowIndex);
+      document.getElementById("userForm").reset();
+      selectedRow = null;
+    }
+  </script>
+
+</body>
+</html>
